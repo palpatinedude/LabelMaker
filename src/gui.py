@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
+import serial
+import time
 
 class Selector:
     def __init__(self, master):
@@ -29,8 +31,15 @@ class Selector:
         self.select_button.pack(pady=10)
 
         #  button to exit the application
-        self.exit_button = tk.Button(master, text="exit", command=master.quit)
+        self.exit_button = tk.Button(master, text="exit", command=self.exit)
         self.exit_button.pack(pady=5)
+
+        try:
+            self.serial_port = serial.Serial(port='/dev/ttyUSB0', baudrate=9600, timeout=1)  #
+            time.sleep(2)  
+        except serial.SerialException as e:
+            messagebox.showerror("Error", f"Failed to open serial port: {e}")
+            self.serial_port = None
 
     def create_listbox(self, symbols, title):
         # frame for each listbox
@@ -64,8 +73,14 @@ class Selector:
 
         if selected_symbols:
             messagebox.showinfo("selected symbol", f"you selected: {', '.join(selected_symbols)}")
+            # send the selected symbol to the controller
+            self.serial_port.write((selected_symbols[0] + '\n').encode())
         else:
             messagebox.showwarning("Warning", "select a symbol from the list.")
+
+    def exit(self):
+        self.serial_port.close()
+        self.master.quit()
 
 if __name__ == "__main__":
     root = tk.Tk()
