@@ -12,6 +12,8 @@
 #define DIR_PIN_Y 26   
 #define SERVO_PIN 27   
 
+
+// function prototypes
 void initDrawing(AccelStepper& stepperX, AccelStepper& stepperY, Servo& penServo);
 void drawA(AccelStepper& stepperX, AccelStepper& stepperY, Servo& penServo);
 void writeSymbol(String symbol, AccelStepper& stepperX, AccelStepper& stepperY, Servo& penServo);
