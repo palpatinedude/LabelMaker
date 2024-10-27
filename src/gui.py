@@ -38,7 +38,7 @@ class Selector:
             self.serial_port = serial.Serial(port='/dev/ttyUSB0', baudrate=9600, timeout=1)  #
             time.sleep(2)  
         except serial.SerialException as e:
-            messagebox.showerror("Error", f"Failed to open serial port: {e}")
+            messagebox.showerror("error", f"failed to open serial port: {e}")
             self.serial_port = None
 
     def create_listbox(self, symbols, title):
@@ -79,7 +79,11 @@ class Selector:
             messagebox.showwarning("Warning", "select a symbol from the list.")
 
     def exit(self):
-        self.serial_port.close()
+        # send 'off' to turn off the system
+        if self.serial_port:
+            self.serial_port.write(b'off\n')
+            time.sleep(1)  
+            self.serial_port.close()
         self.master.quit()
 
 if __name__ == "__main__":

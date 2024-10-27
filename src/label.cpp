@@ -2,7 +2,6 @@
 // runToPosition() --> block operation
 // write() --> set angle of servo
 
-
 #include "label.h"
 
 // initialize the drawing function with motors and servo
@@ -11,6 +10,9 @@ void initDrawing(AccelStepper& stepperX, AccelStepper& stepperY, Servo& pen) {
     stepperY.setCurrentPosition(0);
     pen.attach(SERVO_PIN); 
     pen.write(90); // raise pen
+
+    pinMode(SWITCH_PIN, OUTPUT);
+    digitalWrite(SWITCH_PIN, HIGH);
 }
 
 void drawA(AccelStepper& stepperX, AccelStepper& stepperY, Servo& pen) {
@@ -49,4 +51,11 @@ void writeSymbol(String symbol, AccelStepper& stepperX, AccelStepper& stepperY, 
     if (symbol == "A") {
         drawA(stepperX, stepperY, pen);
     } 
+}
+
+// turn off the switch pin
+void turnOffSwitch(AccelStepper& stepperX, AccelStepper& stepperY) {
+    digitalWrite(SWITCH_PIN, LOW); 
+    stepperX.stop(); 
+    stepperY.stop(); 
 }

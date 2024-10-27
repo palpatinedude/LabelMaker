@@ -4,7 +4,6 @@
 #include "label.h"   // custom library
 
 
-
 // stepper motor objects
 AccelStepper stepperX(AccelStepper::DRIVER, STEP_PIN_X, DIR_PIN_X);
 AccelStepper stepperY(AccelStepper::DRIVER, STEP_PIN_Y, DIR_PIN_Y);
@@ -19,7 +18,20 @@ void setup() {
 
 void loop() {
     if (Serial.available()) {
-        String receivedSymbol = Serial.readStringUntil('\n'); 
-        writeSymbol(receivedSymbol, stepperX, stepperY, pen);
+        String receivedCommand = Serial.readStringUntil('\n'); 
+
+        if (receivedCommand == "off") {
+            // reset motors to initial position
+            stepperX.setCurrentPosition(0);
+            stepperY.setCurrentPosition(0);
+            pen.write(90); // raise pen
+
+            turnOffSwitch(stepperX, stepperY);
+            
+        
+
+        } else {
+            writeSymbol(receivedCommand, stepperX, stepperY, pen);
+        }
     }
 }
