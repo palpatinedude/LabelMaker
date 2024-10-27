@@ -19,15 +19,15 @@ void drawA(AccelStepper& stepperX, AccelStepper& stepperY, Servo& pen) {
     pen.write(0); // pen down 
     delay(1000); // stabilize
 
-    stepperY.moveTo(100); // move up 
-    stepperX.moveTo(-50); // move left 
+    stepperY.moveTo(100 * STEPS_PER_MM_Y); // move up 
+    stepperX.moveTo(-50 * STEPS_PER_MM_X); // move left 
     stepperX.runToPosition(); 
     stepperY.runToPosition(); 
 
     delay(500); // pause
 
     stepperY.moveTo(0); // back down
-    stepperX.moveTo(50); // right
+    stepperX.moveTo(50 * STEPS_PER_MM_X); // right
     stepperX.runToPosition(); 
     stepperY.runToPosition(); 
 
@@ -35,7 +35,7 @@ void drawA(AccelStepper& stepperX, AccelStepper& stepperY, Servo& pen) {
 
     // crossbar 'A'
     stepperX.moveTo(0); // back to center
-    stepperY.moveTo(50); // down for crossbar
+    stepperY.moveTo(50 * STEPS_PER_MM_Y); // down for crossbar
     stepperX.runToPosition(); // 
     stepperY.runToPosition(); // 
 

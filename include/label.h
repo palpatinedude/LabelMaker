@@ -13,6 +13,9 @@
 #define SERVO_PIN 27   
 #define SWITCH_PIN 14 
 
+// steps per mm  example values
+const float STEPS_PER_MM_X = 10.0;  // steps per mm for horizontal (tape) axis
+const float STEPS_PER_MM_Y = 200.0; // steps per mm for vertical (screw) axis
 
 // function prototypes
 void initDrawing(AccelStepper& stepperX, AccelStepper& stepperY, Servo& pen);
