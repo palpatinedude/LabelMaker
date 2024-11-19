@@ -6,6 +6,7 @@
 #include <Arduino.h>
 #include "pins.h"
 #include "symbols.h"
+#include <WebSerial.h>
 
 // ######################## FUNCTIONS DEFINITIONS ########################
 
@@ -93,4 +94,7 @@ void penControl(bool down) {
     }
 }
 
+
+
 // ####################### VARIABLES DEFINITIONS #######################    
+
