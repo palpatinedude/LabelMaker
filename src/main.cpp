@@ -1,6 +1,7 @@
 #include <AccelStepper.h>
 #include <ESP32Servo.h>
-#include "../lib/header.h"   // custom library
+#include "pins.h"   // custom library
+#include "symbols.h"  // custom library
 
 
 // create motor instances for X and Y axes
