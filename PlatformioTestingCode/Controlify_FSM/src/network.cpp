@@ -206,8 +206,6 @@ void Connection::setUpdateTime(unsigned int milliseconds)
 void Connection::sendData()
 {
     char message[50];
-    char current[10];
-    char pressure[10];
 
     
     writePacket(message); //Send data with code:vals and delimiter ,
