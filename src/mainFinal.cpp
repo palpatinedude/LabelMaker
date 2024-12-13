@@ -1,4 +1,4 @@
-/*
+
 #include <AccelStepper.h>
 #include <ESP32Servo.h>
 #include "pins.h"   // custom library
@@ -14,7 +14,8 @@ Motor motorY(Y_EN_PIN, Y_STEP_PIN, Y_DIR_PIN);
 // create servo instance for pen control  
 Servo penServo;
 
-
+// initialize current position of the motor
+int currentPosition = 0;
 
 void setup() {
     Serial.begin(115200); 
@@ -22,15 +23,22 @@ void setup() {
     setupPins(motorX,motorY,penServo);  
     setMotorParameters(motorX, 2000, 1000); 
     setMotorParameters(motorY, 3000, 2000);  
-    Serial.println("Pins setup Complete.");
+    initialization();
+    homing();
+    Serial.println("Setup complete.");
 }
 
 void loop(){
-    Serial.println("Hello!");
-    testRotation(motorX);
-    delay(1000);  // wait for 1 second
+     if (digitalRead(BUTTON_PIN) == LOW || currentPosition >= MAX_POSITION) {
+        homing();  
+    }
+    drawHorizontalLine(470); // for 2 cm
+    delay(1000);
+    drawVerticalLine(9400); // for 2 cm
+    delay(1000);
+    drawHorizontalLine(-470); // for 2 cm
+    delay(1000);
+    drawVerticalLine(-9400); // for 2 cm
 }
 
 //  ----------------- DEFINED FUNCTIONS -----------------
-
-*/

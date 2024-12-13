@@ -1,7 +1,8 @@
 // moveTo() --> target position
 // runToPosition() --> block operation
 // write() --> set angle of servo
-// 4600 steps approximately  1 cm stepper X
+// 4700 steps approximately  1 cm stepper X
+// 235 steps approximately 1 cm stepper Y
 // reference point 0 where the button is pressed
 
 #include <Arduino.h>
@@ -113,9 +114,9 @@ void homing() {
 }
 void penControl(bool down) {  
     if (down) {
-        penServo.write(190);  // further the tape true
+        penServo.write(180);  // further the tape true
     } else {
-        penServo.write(130);   // close to tape false
+        penServo.write(120);   // close to tape false
     }
 }
 
@@ -208,10 +209,14 @@ void drawVerticalLine(int lineLength) {
 void drawSquare(int squareSideLength) {
     // four sides of the square
 
-    drawHorizontalLine(squareSideLength);
-    drawVerticalLine(squareSideLength);
-    drawHorizontalLine(-squareSideLength);
-    drawVerticalLine(-squareSideLength);
+    drawHorizontalLine(235*squareSideLength); // for 2 cm
+    delay(1000);
+    drawVerticalLine(4700*squareSideLength); // for 2 cm
+    delay(1000);
+    drawHorizontalLine(-235*squareSideLength); // for 2 cm
+    delay(1000);
+    drawVerticalLine(-4700*squareSideLength); // for 2 cm
+    delay(1000);
 }
 
 // test the rotation of the motor

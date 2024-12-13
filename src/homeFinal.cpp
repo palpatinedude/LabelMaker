@@ -1,3 +1,5 @@
+/*
+
 #include <AccelStepper.h>
 #include <ESP32Servo.h>
 #include <Arduino.h>
@@ -39,8 +41,10 @@ void loop() {
     motorX.moveSteps(stepsToMove);  // Move motor by 'stepsToMove' 
     motorX.getStepper().runToPosition();  // Wait until the motor reaches the target position
     currentPosition += stepsToMove;  // Update current position relative to reference point (0)
-    Serial.print("Current Position: ");
-    Serial.println(currentPosition);  // Print current position
+    
+//    Serial.print("Current Position: ");
+  //  Serial.println(currentPosition);  // Print current position
     delay(1000);  // Delay for 1 second
-}
 
+
+*/
