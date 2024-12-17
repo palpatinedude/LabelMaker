@@ -1,5 +1,5 @@
-#ifndef SYMBOLS_H
-#define SYMBOLS_H
+#ifndef DRAW_H
+#define DRAW_H
 
 // letter struct
 struct Letter {
@@ -11,4 +11,12 @@ struct Letter {
 // letterMovements as an external variable to prevent multiple definitions
 extern const Letter letterMovements[26];
 
-#endif  // SYMBOLS_H
+
+// Function prototypes for drawing operations
+void drawHorizontalLine(int lineLength);
+void drawVerticalLine(int lineLength);
+void drawLetter(char letter);
+void drawSquare(int squareSideLength);
+
+
+#endif // DRAW_H

@@ -1,141 +1,32 @@
 // moveTo() --> target position
 // runToPosition() --> block operation
 // write() --> set angle of servo
-// 4700 steps approximately  1 cm stepper X
+// 4250 steps approximately  1 cm stepper X
 // 235 steps approximately 1 cm stepper Y
 // reference point 0 where the button is pressed
+// variable tape diameter circumference=28.5cm  ,outer diameter=9.07cm
 
 #include <Arduino.h>
 #include "../include/motor.h"
 #include "../include/pins.h"
-#include "../include/symbols.h"
 
 
 // ######################## FUNCTIONS DEFINITIONS ########################
+
+
 /*
-void homing() {
-    Serial.println("Homing: Moving stepper motor X to home position...");
-    penControl(true);  // Lower the pen (if necessary)
-
-    // Slow down the motor for precise homing
-    motorX.enableMotor(true);  // Enable motor
-    motorX.setSpeed(800);  // Slow speed for accurate homing
-    motorX.setAcceleration(400);  // Slow acceleration for smooth approach
-  
-
-    // Move the motor in the negative direction towards home
-    motorX.moveSteps(-100000);  // Move a large number of steps to ensure it reaches the home position
-
-    while (true) {
-        motorX.run();  // Continuously run the motor
-        if (digitalRead(BUTTON_PIN) == LOW) {  // If the button is pressed (LOW), stop the motor
-            motorX.getStepper().stop();  // Immediately stop the motor
-            motorX.getStepper().setCurrentPosition(0);  // Set the current position as 0 (home)
-            break;  // Exit the loop
-        }
-    }
-
-    Serial.println("X Motor homing complete. Current position set to 0.");
-}
-void homing() {
-   // motorX.moveSteps(HOME_POSITION);  
-    
-    motorX.moveTo(HOME_POSITION);
-    //while (motorX.getStepper().isRunning()) {
-      //  motorX.run();  
-    //}
-    Serial.println("Motor reached home position (9200 steps from reference point).");
+void setupMotors(Motor &motorX, Motor &motorY) {
+    motorX.enableMotor(true);
+    motorY.enableMotor(true);
+    Serial.println("Motors setup complete.");
 }
 
-void homing() {
-    Serial.println("Homing: Moving stepper motor X to home position...");
-
-    // Check if the motor has reached max position (27600 steps from 0)
-    if (currentPosition >= MAX_POSITION) {
-        // If at max position, home at 8400 steps from the max position
-        motorX.moveTo(MAX_POSITION - HOME_POSITION);  // Move 8400 steps from max position
-        Serial.println("At max position, moving to home position 8400 steps from max.");
-    } else {
-        // Otherwise, home at 9200 steps from reference point (0)
-        motorX.moveTo(HOME_POSITION);  // Move 9200 steps from 0
-        Serial.println("Moving to home position 9200 steps from reference point.");
-    }
-
-    // Wait for the motor to reach the home position
-    while (motorX.getStepper().isRunning()) {
-        motorX.run();  // Continuously run the motor until it reaches the target
-    }
-
-    currentPosition = motorX.getStepper().currentPosition();  // Update current position
-    Serial.println("Motor reached home position.");
+void setupServo(Servo &penServo) {
+    penServo.attach(PEN_PIN);
+    penControl(true);
+    Serial.println("Servo setup complete.");
 }
 
-void homing() {
-    Serial.println("Homing: Moving stepper motor X to home position...");
-
-    if (currentPosition == 0) {
-        // If the current position is 0 (reference point)
-        motorX.moveTo(HOME_POSITION);  // Move to 9200 steps (home position from reference point)
-        Serial.println("At reference point (0), moving 9200 steps to home position.");
-    }
-    else if (currentPosition >= MAX_POSITION) {
-        // If the current position is the max position (27600 steps from reference point)
-        motorX.moveTo(currentPosition - 9200);  // Move 18400 steps back to home position
-        Serial.println("At max position (27600), moving 18400 steps back to home position.");
-    }
-
-   // motorX.runToPosition();  // Block and wait until the motor reaches the home position
-
-    currentPosition = motorX.getStepper().currentPosition();  // Update the current position
-    Serial.println("Motor reached home position.");
-}
-*/
-void homing() {
-    Serial.println("Homing: Moving stepper motor X to home position...");
-
-    if (currentPosition == 0) {
-        // If the current position is 0 (reference point)
-        motorX.moveTo(HOME_POSITION);  // Move 9200 steps from reference point (0)
-        Serial.println("At reference point (0), moving 9200 steps to home position.");
-    } 
-    else if (currentPosition >= MAX_POSITION) {
-        // If the current position is at or past the max position (27600 steps from reference point)
-        motorX.moveTo(currentPosition - 18400);  // Move 18400 steps back to home position
-        Serial.println("At max position (27600), moving 18400 steps back to home position.");
-    }
-
-    // Wait for the motor to reach the home position
-  //  while (motorX.getStepper().isRunning()) {
-        motorX.run();  
-    //}
-
-    currentPosition = motorX.getStepper().currentPosition();  // Update the current position
-    Serial.println("Motor reached home position.");
-}
-void penControl(bool down) {  
-    if (down) {
-        penServo.write(180);  // further the tape true
-    } else {
-        penServo.write(120);   // close to tape false
-    }
-}
-
-void setupPins(Motor &motorX,Motor &motorY,Servo &penServo) {
-
-    Serial.println("Setting up pins...");
-    pinMode(BUTTON_PIN, INPUT);   
-    pinMode(PEN_PIN, OUTPUT);            
-  
-    motorX.enableMotor(true);  
-    motorY.enableMotor(true);  
-    
-   // motorX.moveTo(0);
-    penServo.attach(PEN_PIN); 
-
-    penControl(true);  
-    Serial.println("Pins setup complete.");
-  
-}
 
 void initialization(){
     penControl(true); 
@@ -144,7 +35,7 @@ void initialization(){
         motorX.run();
     }
     motorX.stop(); // Stop motor after pressing the buttoSSn
-    currentPosition = 0; // Update current position
+    currentPositionX = 0; // Update current position
     motorX.getStepper().setCurrentPosition(0);  // Update current position
 }
 
@@ -185,6 +76,7 @@ void drawHorizontalLine(int lineLength) {
 
     while (motorY.getStepper().isRunning()) {
         motorY.run();  
+        currentPositionY = motorY.getStepper().currentPosition();
     }
     penControl(true);  
     Serial.println("Vertical line complete.");
@@ -198,6 +90,7 @@ void drawVerticalLine(int lineLength) {
     motorX.moveSteps(lineLength);  
     while (motorX.getStepper().isRunning()) {
         motorX.run();  
+        currentPositionX = motorX.getStepper().currentPosition();
     }
 
     penControl(true);  
@@ -209,15 +102,86 @@ void drawVerticalLine(int lineLength) {
 void drawSquare(int squareSideLength) {
     // four sides of the square
 
-    drawHorizontalLine(235*squareSideLength); // for 2 cm
+    drawHorizontalLine(235*squareSideLength); 
     delay(1000);
-    drawVerticalLine(4700*squareSideLength); // for 2 cm
+    drawVerticalLine(4250*squareSideLength); 
     delay(1000);
-    drawHorizontalLine(-235*squareSideLength); // for 2 cm
+    drawHorizontalLine(-235*squareSideLength);
     delay(1000);
-    drawVerticalLine(-4700*squareSideLength); // for 2 cm
+    drawVerticalLine(-4250*squareSideLength);
     delay(1000);
 }
+*/
+
+/*
+
+// Check if tape (Y-axis) has done one full rotation
+void checkTapeRotation() {
+    currentPositionY = motorY.getStepper().currentPosition(); // Track Y-axis position
+    Serial.print("Current position Y: ");
+    Serial.println(currentPositionY);
+    
+    // Check if a full rotation is completed
+    if (abs(currentPositionY) >= stepsFullRotationY) {
+        rotations++;
+        Serial.print("Tape motor completed 1 full rotation. Total rotations: ");
+        Serial.println(rotations);
+        
+        // Reset the Y-axis position tracker
+        motorY.getStepper().setCurrentPosition(0); // Reset position for next rotation
+        currentPositionY = 0;
+        
+        // Lift the home position of X by 1 cm (4250 steps)
+        HOME_POSITION += X_per_cm;
+        Serial.print("New home position: ");
+        Serial.println(HOME_POSITION);
+        
+        // Move the X-axis to the new home position
+        motorX.moveTo(HOME_POSITION); 
+        motorX.getStepper().runToPosition(); // Block until motor reaches the target
+        Serial.println("Moved X-axis to new home position.");
+    }
+}
+
+// Check if motor has reached the home position or the max position
+void checkHoming() {
+    // Get the current position of the motor
+    currentPositionX = motorX.getStepper().currentPosition();
+    
+    // If at max position (27600 steps), perform homing
+    if (currentPositionX >= MAX_POSITION) {
+        Serial.println("Max position reached, performing homing...");
+        homing();  // Perform homing when max position is reached
+    }
+    // If at min position (0), perform homing
+    else if (currentPositionX <= 0) {
+        Serial.println("Min position reached, performing homing...");
+        homing();  // Perform homing when min position is reached
+    }
+}
+
+void homing() {
+    Serial.println("Homing: Moving stepper motors to home position...");
+
+    if (currentPositionX >= MAX_POSITION) {
+        motorX.moveTo(MAX_POSITION - 10625);  // Move to 18200 steps (27600 - 9700)
+        motorX.getStepper().runToPosition();  // Block until the motor reaches the target
+        Serial.println("At max position (27600), moving to home position.");
+    } else if (currentPositionX == 0) {
+        motorX.moveTo(HOME_POSITION);  // Move to 9500 steps forward from point 0
+        motorX.getStepper().runToPosition();  // Block until the motor reaches the target
+        Serial.println("At min position (0), moving to home position.");
+    }
+
+    currentPositionX = motorX.getStepper().currentPosition();  // Update current position
+    Serial.println("Motor X reached home position.");
+}
+
+
+void penControl(bool down) {  
+    penServo.write(down ? PEN_DOWN_ANGLE : PEN_UP_ANGLE);
+}
+
 
 // test the rotation of the motor
 void testMotor(Motor &motor, int steps) {
@@ -234,15 +198,5 @@ void testMotor(Motor &motor, int steps) {
     }
     delay(500); 
 
-}
-
-
-/*
-void homeMotors() {
-    motorX.moveTo(0);
-    motorY.moveTo(0);
-    motorX.runToPosition();
-    motorY.runToPosition();
-    Serial.println("Motors homed.");
 }
 */

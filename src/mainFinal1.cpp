@@ -2,8 +2,10 @@
 #include <AccelStepper.h>
 #include <ESP32Servo.h>
 #include "pins.h"   // custom library
-#include "symbols.h"  // custom library
+#include "draw.h"  // custom library
 #include "motor.h" // custom library
+#include "init.h"  // custom library
+#include "movement.h" // custom library
 #include <Arduino.h>
 
 
@@ -15,30 +17,27 @@ Motor motorY(Y_EN_PIN, Y_STEP_PIN, Y_DIR_PIN);
 Servo penServo;
 
 // initialize current position of the motor
-int currentPosition = 0;
+// Global variable definitions
+int currentPositionX = 0;  // Current position of X-axis
+int currentPositionY = 0; // Current position of Y-axis
+int rotations = 0;        // Number of tape rotations completed
+int HOME_POSITION = 4250; // Initial home position for X-axis (can increase by 4250 steps after each tape rotation)
+
 
 void setup() {
     Serial.begin(115200); 
     Serial.println("Starting setup...");
-    setupPins(motorX,motorY,penServo);  
-    setMotorParameters(motorX, 2000, 1000); 
-    setMotorParameters(motorY, 3000, 2000);  
     initialization();
-    homing();
     Serial.println("Setup complete.");
 }
 
-void loop(){
-     if (digitalRead(BUTTON_PIN) == LOW || currentPosition >= MAX_POSITION) {
-        homing();  
-    }
-    drawHorizontalLine(470); // for 2 cm
-    delay(1000);
-    drawVerticalLine(9400); // for 2 cm
-    delay(1000);
-    drawHorizontalLine(-470); // for 2 cm
-    delay(1000);
-    drawVerticalLine(-9400); // for 2 cm
+void loop() {
+
+    checkHoming();
+    checkTapeRotation();
+    drawLetter('A');
+    delay(2000);
+   
 }
 
 //  ----------------- DEFINED FUNCTIONS -----------------
