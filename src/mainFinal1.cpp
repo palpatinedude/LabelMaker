@@ -1,4 +1,3 @@
-
 #include <AccelStepper.h>
 #include <ESP32Servo.h>
 #include "pins.h"   // custom library
@@ -21,7 +20,7 @@ Servo penServo;
 int currentPositionX = 0;  // Current position of X-axis
 int currentPositionY = 0; // Current position of Y-axis
 int rotations = 0;        // Number of tape rotations completed
-int HOME_POSITION = 4250; // Initial home position for X-axis (can increase by 4250 steps after each tape rotation)
+int HOME_POSITION = 4550; // Initial home position for X-axis (can increase by 4250 steps after each tape rotation)
 
 
 void setup() {
@@ -35,7 +34,14 @@ void loop() {
 
     checkHoming();
     checkTapeRotation();
-    drawLetter('A');
+    drawLetter(L'Γ');
+    delay(500);
+    drawLetter(L'Ε');
+    delay(500);
+    drawLetter(L'Ι');
+    delay(500);
+    drawLetter(L'Α');
+    //drawCircle(1);
     delay(2000);
    
 }

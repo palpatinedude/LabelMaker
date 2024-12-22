@@ -1,8 +1,8 @@
 // moveTo() --> target position
 // runToPosition() --> block operation
 // write() --> set angle of servo
-// 4250 steps approximately  1 cm stepper X
-// 235 steps approximately 1 cm stepper Y
+// 4550 steps approximately  1 cm stepper X
+// 215 steps approximately 1 cm stepper Y
 // reference point 0 where the button is pressed
 // variable tape diameter circumference=28.5cm  ,outer diameter=9.07cm
 

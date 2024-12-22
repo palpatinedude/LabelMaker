@@ -9,7 +9,7 @@
 #define BUTTON_PIN 4          // button with pull-up
 #define PEN_PIN 13            // servo for pen control
 #define PEN_DOWN_ANGLE 180    // angle for pen up
-#define PEN_UP_ANGLE 127      // angle for pen down
+#define PEN_UP_ANGLE 110      // angle for pen down
 
 // define steps per 1 cm for each motor
 #define X_per_cm 4250         // X-axis steps per cm
