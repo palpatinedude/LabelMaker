@@ -1,18 +1,37 @@
-This project is for controlling a label plotter system that draws letters using a pen mounted on a movable platform. The plotter uses stepper motors to control the movement on the X and Y axes,
-a servo motor to lift and lower the pen, and an ESP32 microcontroller to handle the overall control.
-Overview
+# Label Plotter System
 
-The label plotter starts by "homing" the system to find its reference position, then it proceeds to draw labels (Greek letters, in this case) on a predefined grid. After each letter is drawn,
-the plotter moves the paper (by rotating a stepper motor) to the next position for the next letter.
-Key Features:
+## Overview
 
-    Homing: The system finds its home position using a button before starting the drawing process or reach max position.
-    Step-by-Step Drawing: The plotter draws Greek letters one by one.
-    Servo Control: The pen is automatically raised and lowered based what is neccessary.
-    Label Movement: After drawing each letter, the plotter moves the paper to the next spot for drawing the next letter.
+This project controls a label plotter that draws letters using a pen attached to a movable platform. The system uses stepper motors to move on X and Y axes, a servo motor to lift and lower the pen, and an ESP32 microcontroller to control everything.
 
-Components Used:
-    ESP32 Microcontroller: Handles motor control, servo, and button input.
-    Stepper Motors (2): Drive the X and Y axes for drawing the labels.
-    Servo Motor: Controls the pen up and down function for drawing.
-    Push Button: Used to initiate the homing process.
+The plotter first finds its home position, then draws Greek letters one by one on a grid. After each letter, it moves the paper to the next position for the next drawing.
+
+---
+
+## Key Features
+
+- **Homing:** Finds the starting position using a push button.
+- **Step-by-Step Drawing:** Draws Greek letters one at a time.
+- **Servo Control:** Automatically raises and lowers the pen when needed.
+- **Label Movement:** Moves the paper after each letter to prepare for the next.
+
+---
+
+## Components Used
+
+- **ESP32 Microcontroller:** Manages motors and button input.
+- **Stepper Motors (2):** Move the pen along X and Y axes.
+- **Servo Motor:** Controls pen up/down movement.
+- **Push Button:** Starts the homing process.
+
+---
+
+## How It Works
+
+1. Press the button to start homing.
+2. The plotter moves to the home position.
+3. The pen lowers, and the plotter draws a letter.
+4. The pen raises, and the paper moves to the next spot.
+5. Repeat steps 3 and 4 for each letter.
+
+---
